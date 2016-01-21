@@ -13,10 +13,12 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+
 from django.conf.urls import include, url
-from . import views
+from django.contrib import admin
+import vote.urls
 
 urlpatterns = [
-    url(r'^view/', views.view,name="view"),
-    url(r'^add/', views.vote,name="vote"),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^vote/', include(vote.urls)),
 ]

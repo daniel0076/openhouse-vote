@@ -1,0 +1,19 @@
+{% extends 'base.html'%}
+{% load staticfiles %}
+
+{% block content %}
+<div class="content">
+	<form class="ui form" method="POST" action="{% url "add" %}" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="required field">
+			<label>{{form.logo.label_tag}}</label>
+			{{form.logo}}
+		</div>
+		<div class="required field">
+			<label>{{form.concept.label_tag}}</label>
+			{{form.concept}}
+		</div>
+		<button class="ui button">增加選項</button>
+	</form>
+</div>
+{% endblock %}

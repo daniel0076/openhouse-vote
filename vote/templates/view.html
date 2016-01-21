@@ -2,24 +2,69 @@
 {% load staticfiles %}
 
 {% block content %}
-<div class="ui segmant" ng-app="oh" ng-controller="ohVote">
+<div class="ui segmant main" ng-app="oh" ng-controller="ohVote">
+	<div ng-class="{true: 'ui active inverted dimmer', false: 'ui inverted dimmer'}[load]">
+		<div class="ui large text loader">Loading</div>
+	</div>
 	<div class="ui six column grid">
-		{% for o in options %}
-		<div class="column">
+		<div class="column" ng-repeat="logo in logos" on-finish-render="onFinish()">
 			<div class="ui card">
 				<div class="image">
-					<img src="{{o.logo.url}}">
+					<img class="logo_img" ng-src="http://daniel.nctu.me/uploads/{$logo.fields.logo$}" imageonload >
+					<div class="ui flowing popup bottom left transition hidden">
+							<h2>設計理念</h2>
+								<p> {$ logo.fields.concept $}</p>
+					</div>
 				</div>
 				<div class="content">
-					<div class="ui checkbox">
-						<input type="checkbox" name="{{o.id}}">
-						<label>投我一票</label>
-					</div>
+					<div ng-class="selected ? 'ui green button' : 'ui button'" ng-click="toggleSelection(logo.pk);selected=canSelect && (!selected)">投我一票</div>
 				</div>
 			</div>
 		</div>
-		{% endfor %}
 	</div>
-	<div class="ui button" ng-click="vote()">test</div>
+	<div class="ui segmant">
+		<div class="ui huge blue button vote">填寫資料並送出</div>
+	</div>
+
+	<div class="ui small modal">
+		<div class="ui segment">
+			<div class="ui message">
+				<label>注意事項</label>
+				<div class="ui bulleted list">
+					<div class="item">資料僅為抽獎之用，請確實填寫，我們會確實保護好您的個資</div>
+					<div class="item">在校生請填學號，教職員工請填工號，畢業校友請填身份證字號</div>
+				</div>
+			</div>
+			<form class="ui form" ng-submit="vote()">
+				{%csrf_token%}
+				<div class="ui error message"></div>
+				<div class="two fields">
+					<div class="required field">
+						<label>{{form.idno.label_tag}}</label>
+						{{form.idno}}
+					</div>
+					<div class="required field">
+						<label>{{form.identity.label_tag}}</label>
+						{{form.identity}}
+					</div>
+				</div>
+				<div class="three fields">
+					<div class="required field">
+						<label>{{form.name.label_tag}}</label>
+						{{form.name}}
+					</div>
+					<div class="required field">
+						<label>{{form.cellphone.label_tag}}</label>
+						{{form.cellphone}}
+					</div>
+					<div class="required field">
+						<label>{{form.email.label_tag}}</label>
+						{{form.email}}
+					</div>
+				</div>
+				<button class="ui green button" type="submit">確認送出</button>
+			</form>
+		</div>
+	</div>
 </div>
 {% endblock %}

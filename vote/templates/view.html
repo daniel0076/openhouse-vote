@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+{% load staticfiles %}
+
+{% block content %}
+<div class="ui segmant" ng-app="oh" ng-controller="ohVote">
+	<div class="ui six column grid">
+		{% for o in options %}
+		<div class="column">
+			<div class="ui card">
+				<div class="image">
+					<img src="{{o.logo.url}}">
+				</div>
+				<div class="content">
+					<div class="ui checkbox">
+						<input type="checkbox" name="{{o.id}}">
+						<label>投我一票</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	<div class="ui button" ng-click="vote()">test</div>
+</div>
+{% endblock %}

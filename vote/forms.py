@@ -10,10 +10,12 @@ class VoterForm(ModelForm):
 	class Meta:
 		model=models.Voter
 		fields='__all__'
+		exclude=['added']
 	def __init__(self, *args, **kwargs):
 			super(VoterForm, self).__init__(*args, **kwargs)
 			self.fields['identity'].widget.attrs.update({
 				'class': 'ui dropdown',
+				'ng-model': 'form.identity',
 				})
 			self.fields['idno'].widget.attrs.update({
 				'ng-model': 'form.idno',

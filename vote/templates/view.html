@@ -6,18 +6,50 @@
 	<div ng-class="{true: 'ui active inverted dimmer', false: 'ui inverted dimmer'}[load]">
 		<div class="ui large text loader">Loading</div>
 	</div>
-	<div class="ui six column grid">
+	<h1 class="ui header">OpenHouse Logo 初徵選投票</h1>
+	<div class="ui message">
+		<p>Open up！ Open your mind！交大就輔組為徵選具有創意並能呈現本校Open House企業校園徵才精神之圖徽設計，邀請全體交大人一起來投票，選出您心中的最佳作品！</p>
+		<p>票選得票數前20名作品將入圍進入決選，由專業評審委員團選出獲獎作品。</p>
+		<div class="ui divider"></div>
+		<div class="label">投票規則</div>
+		<div class="ui bulleted list">
+			<div class="item">投票資格：在校生、畢業校友及教職員等</div>
+			<div class="item">投票規則：每人限投一次，可投5票</div>
+			<div class="item">投票方式：於下方選出作品，填寫資料後投票</div>
+			<div class="item">投票期間: 即日起至105年2月2日止</div>
+			<div class="item">參加投票就有獲獎機會：(中獎名單將於就輔組網頁公布)，獎項有：7-11(200元)商品卡，共4張、威秀電影票，共8張</div>
+			<div class="item">活動聯絡人: 就輔組 吳小姐 wenling@g2.nctu.edu.tw</div>
+		</div>
+	</div>
+	<div class="ui five column grid">
 		<div class="column" ng-repeat="logo in logos" on-finish-render="onFinish()">
 			<div class="ui card">
 				<div class="image">
-					<img class="logo_img" ng-src="http://daniel.nctu.me/uploads/{$logo.fields.logo$}" imageonload >
+					<a class="ui left corner teal tiny label">
+						<div class="ui mini statistic">
+							<div class="value">
+							{$ logo.pk $}
+							</div>
+						</div>
+					</a>
+					<img class="logo_img" ng-src="http://140.113.27.54/uploads/{$logo.fields.logo$}" imageonload >
 					<div class="ui flowing popup bottom left transition hidden">
 							<h2>設計理念</h2>
 								<p> {$ logo.fields.concept $}</p>
 					</div>
 				</div>
 				<div class="content">
-					<div ng-class="selected ? 'ui green button' : 'ui button'" ng-click="toggleSelection(logo.pk);selected=canSelect && (!selected)">投我一票</div>
+					<div class="ui tiny teal statistic">
+						<div class="value">
+							{$ logo.fields.votes $}
+						</div>
+						<div class="label">
+							票
+						</div>
+					</div>
+					<div ng-class="selected ? 'ui green labeled icon button vote' : 'ui labeled icon button vote'"
+		  ng-click="toggleSelection(logo.pk);selected=canSelect && (!selected)"><i class="thumbs up icon"></i>
+			Vote!</div>
 				</div>
 			</div>
 		</div>
@@ -38,6 +70,13 @@
 			<form class="ui form" ng-submit="vote()">
 				{%csrf_token%}
 				<div class="ui error message"></div>
+				<div class="ui red message" ng-show="voteError">
+				<label>投票失敗</label>
+					<div class="ui bulleted list">
+						<div class="item">一人僅有一次投票機會，請填寫正確資料。</div>
+						<div class="item" ng-repeat="(error,msg) in errors">{$error$}: {$msg[0]$}</div>
+					</div>
+				</div>
 				<div class="two fields">
 					<div class="required field">
 						<label>{{form.idno.label_tag}}</label>

@@ -28,5 +28,15 @@ class Voter(models.Model):
 	name= models.CharField(u'姓名', max_length=30)
 	identity= models.CharField(u'身份', max_length=10, choices=Identity)
 	idno = models.CharField(u'學號/工號/身份證字號',primary_key=True,max_length=10)  # AutoField
-	email= models.EmailField(u'Email')
-	cellphone= models.CharField(u'手機號碼',max_length=10,validators=[validate_mobile],help_text='手機')
+	email= models.EmailField(u'Email',unique=True)
+	cellphone= models.CharField(u'手機號碼',unique=True,max_length=10,validators=[validate_mobile],help_text='手機')
+	added = models.DateTimeField(auto_now_add=True)
+
+class Votes(models.Model):
+	class Meta:
+		verbose_name = "計票"
+		verbose_name_plural = "計票"
+	voter = models.ForeignKey( 'Voter', on_delete=models.CASCADE)
+	vote_to = models.ForeignKey( 'Candidates', on_delete=models.CASCADE)
+
+
